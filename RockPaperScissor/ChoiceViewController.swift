@@ -35,7 +35,8 @@ class ChoiceViewController: UIViewController {
     }
     
     private func getUserMove(_ sender: UIButton) -> GameMove {
-        let move = sender.restorationIdentifier!
+        //let move = sender.restorationIdentifier!
+        let move = sender.title(for: UIControl.State())!
         return GameMove(rawValue: move)!
     }
 
