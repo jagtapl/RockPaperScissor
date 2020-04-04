@@ -13,23 +13,12 @@ class ChoiceViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
-        
-        
     }
 
     @IBAction func playRock(_ sender: Any) {
-        // present resuluts view controller
-        // setup the property
-        
         let resultsVC = self.storyboard?.instantiateViewController(identifier: "ResultsViewController") as! ResultsViewController
         
-        let senderButton = sender as! UIButton
-
-        print(senderButton.restorationIdentifier!)
-        print(senderButton.tag)
-        
-        resultsVC.result = senderButton.restorationIdentifier ?? ""
+        resultsVC.userMove = getUserMove(sender as! UIButton)
         self.present(resultsVC, animated: true, completion: nil)
     }
     
@@ -38,11 +27,16 @@ class ChoiceViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let senderButton = sender as? UIButton {
+        if segue.identifier == "showResult" {
             if let resultsVC = segue.destination as? ResultsViewController {
-                resultsVC.result = senderButton.restorationIdentifier ?? ""
+                resultsVC.userMove = getUserMove(sender as! UIButton)
             }
         }
+    }
+    
+    private func getUserMove(_ sender: UIButton) -> GameMove {
+        let move = sender.restorationIdentifier!
+        return GameMove(rawValue: move)!
     }
 
 }

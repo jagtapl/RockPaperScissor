@@ -22,8 +22,6 @@ enum GameMove: String {
 
 
 class ResultsViewController: UIViewController {
-
-    var result: String?
     
     @IBOutlet weak var resultImageView: UIImageView!
     @IBOutlet weak var resultLabel: UILabel!
@@ -42,33 +40,26 @@ class ResultsViewController: UIViewController {
     // This method compares users move with opponent (randomly genenrated) move. Based on the result it updates the image and label.
     private func showResults() {
         
-        // Do any additional setup after loading the view.
-        if let result = result {
-            print("display the \(result) result")
-        }
+        var showImageName: String
+        var showText: String
+        let gameMove = "\(userMove.rawValue) vs \(opponentMove.rawValue)"
         
-        switch result {
-        case "rock":
-            print("display RockCrushesScissors")
-            resultImageView.image = UIImage(named: "RockCrushesScissors")
-            resultLabel.text = "Rock crushes scissors. You win!"
+        switch (userMove!, opponentMove) {
+        case let (user, opponent) where (user == opponent):
+            showText = "\(gameMove): Its a tie!"
+            showImageName = "tie"
             
-        case "paper":
-            print("display PaperCoversRock")
-            resultImageView.image = UIImage(named: "PaperCoversRock")
-            resultLabel.text = "Paper covers rock. You loose!"
-
-        case "scissors":
-            print("display ScissorsCutPaper")
-            resultImageView.image = UIImage(named: "ScissorsCutPaper")
-            resultLabel.text = "Scissors cut paper. You loose!"
+        case (.Rock, .Scissors), (.Paper, .Rock), (.Scissors, .Paper):
+            showText = "You win with \(gameMove)"
+            showImageName = "\(userMove.rawValue)-\(opponentMove.rawValue)"
 
         default:
-            resultImageView.image = nil
-            resultLabel.text = "Its a tie!"
-
-            print("its a tie")
+            showText = "You lose with \(gameMove)"
+            showImageName = "\(opponentMove.rawValue)-\(userMove.rawValue)"
         }
+        showImageName = showImageName.lowercased()
+        resultImageView.image = UIImage(named: showImageName)
+        resultLabel.text = showText
     }
     
     @IBAction func playItAgain(_ sender: Any) {
